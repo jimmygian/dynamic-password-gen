@@ -88,11 +88,35 @@ var upperCasedCharacters = [
   'Z'
 ];
 
+// ==================================== //
+
+
 // Function to prompt user for password options
 function getPasswordOptions() {
-  // Get length of p/w user prefers, between 8 - 128 inclusive
   
-  // Get prefered types (at least 1 of those char classes should be selected)
+  // 1. Get length of p/w user prefers, between 8 - 128 inclusive
+  var pwLength = prompt("Choose password length (between 8 - 128 chars):");
+
+  // Evaluate user input:
+  while (pwLength !== null) {
+    // Try to make user input a number
+    pwLength = parseInt(pwLength);
+    
+    // Evaluate user input
+    if (pwLength >= 8 && pwLength <= 128 && !isNaN(pwLength)) {
+      // Break if user input is correct
+      break;
+    } else {
+      // Re-prompt if user input is incorrect
+      pwLength = prompt("Please insert a numberic value between 8 -128. Choose password length:");
+    }
+  }
+
+  // Test pwLength output in console
+  console.log("Passworkd length is:", pwLength);
+
+
+  // 2. Get prefered types (at least 1 of those char classes should be selected)
     // lowercase
     // UPPERCASE
     // Numeric
@@ -101,6 +125,9 @@ function getPasswordOptions() {
   // return an onject with all user's p/w preferences
 }
 
+
+
+
 // Function for getting a random element from an array
 function getRandom(arr) {
 
@@ -108,7 +135,7 @@ function getRandom(arr) {
 
 // Function to generate password with user input
 function generatePassword() {
-  getPasswordOptions() 
+  getPasswordOptions()
   return "WORKS!!"
 }
 
