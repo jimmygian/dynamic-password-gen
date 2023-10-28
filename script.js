@@ -160,12 +160,37 @@ function getRandom(arr) {
 
 }
 
+
+
+
 // Function to generate password with user input
 function generatePassword() {
   
-  // Get P/W options
+  // Get P/W options, return if null
   var pwOptions = getPasswordOptions()
   console.log("'pwOptions' object:", pwOptions)
+
+  if (pwOptions === null) {
+    return "** Try again! **"
+  }
+  
+  // Generate arr of acceptable chars
+  var allowedChars = [];
+  if (pwOptions.lowercase) {
+    allowedChars = allowedChars.concat(hasLowerCasedCharacters)
+  }
+  if (pwOptions.uppercase) {
+    allowedChars = allowedChars.concat(hasUpperCasedCharacters)
+  }
+  if (pwOptions.numeric) {
+    allowedChars = allowedChars.concat(hasNumericCharacters)
+  }
+  if (pwOptions.special) {
+    allowedChars = allowedChars.concat(hasSpecialCharacters)
+  }
+
+  // Allowed chars
+  console.log("allowedChars:", allowedChars)
 
   
 
