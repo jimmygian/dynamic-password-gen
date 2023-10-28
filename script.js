@@ -93,7 +93,7 @@ var hasUpperCasedCharacters = [
 
 // A) Function to prompt user for password options
 function getPasswordOptions() {
-  
+
   // Gets length of p/w user prefers, between 8 - 128 inclusive
   var pwLength = prompt("Choose password length (between 8 - 128 chars):");
 
@@ -101,7 +101,7 @@ function getPasswordOptions() {
   while (pwLength !== null) {
     // Tries to make user input a number
     pwLength = parseInt(pwLength);
-    
+
     if (pwLength >= 8 && pwLength <= 128 && !isNaN(pwLength)) {
       // Breaks if user input is correct
       break;
@@ -117,15 +117,30 @@ function getPasswordOptions() {
   }
 
   // Gets prefered types (at least 1 of those char classes should be selected)
-    // lowercase
-    var hasLowercase = confirm("Should password include lowercase?");
-    // UPPERCASE
-    var hasUppercase = confirm("Should password include uppercase?");
-    // Numeric
-    var hasNumeric = confirm("Should password include numeric values?");
-    // Special chars
-    var hasSpecial = confirm("Should password include special characters?");
-  
+  // lowercase
+  var hasLowercase = confirm("Should password include lowercase?");
+  // UPPERCASE
+  var hasUppercase = confirm("Should password include uppercase?");
+  // Numeric
+  var hasNumeric = confirm("Should password include numeric values?");
+  // Special chars
+  var hasSpecial = confirm("Should password include special characters?");
+
+
+  var charClasses = 0;
+  if (hasLowercase) {
+    charClasses++;
+  }
+  if (hasUppercase) {
+    charClasses++;
+  }
+  if (hasNumeric) {
+    charClasses++;
+  }
+  if (hasSpecial) {
+    charClasses++;
+  }
+
 
   // Returns an object with all user's p/w preferences
   var pwOptions = {
@@ -133,7 +148,8 @@ function getPasswordOptions() {
     lowercase: hasLowercase,
     uppercase: hasUppercase,
     numeric: hasNumeric,
-    special: hasSpecial
+    special: hasSpecial,
+    charClassesNum: charClasses
   };
 
   // Checks if at least 1 char class was chosen, return null if none was.
@@ -148,70 +164,71 @@ function getPasswordOptions() {
 
 // B) Function for getting a random element from an array
 function getRandom(arr) {
+  console.log(arr)
 
-  // Creates a variable to store the randomized array
-  var randomArr = [];
-  
-  // Copies array so that original is not modified
-  var unshuffledArr = [];
-  var unshuffledArr = unshuffledArr.concat(arr);
-
-  // Shuffles array
-  while (unshuffledArr.length !== 0) {
-    // Chooses a random number between 0 and array's length
-    var j = Math.floor(Math.random() * (unshuffledArr.length));
-    // Concats the char of that index to randomArr
-    randomArr = randomArr.concat(unshuffledArr[j])
-    // Removes that char from the unshuffled array
-    unshuffledArr.splice(j, 1);
-  }
-  
-  // Returns randomized array
-  return randomArr;
+  return [];
 }
 
 
 
 // C) Function to generate password with user input
 function generatePassword() {
-  
+
   // Gets P/W options, return if null
   var pwOptions = getPasswordOptions()
 
   if (pwOptions === null) {
     return "** Try again! **"
   }
-  
-  // Generates arr of acceptable chars
-  var allowedChars = [];
-  var totalChars = 0;
+
+  // Get totalChar number
+  var totalChar = 0;
+
+  //  Calculates chances
+  var chanceLower = 0;
+  var chanceUpper = 0;
+  var chanceNumeric = 0;
+  var chanceSpecial = 0;
+
   if (pwOptions.lowercase) {
-    allowedChars = allowedChars.concat(hasLowerCasedCharacters);
-    totalChars += hasLowerCasedCharacters.length;
+    totalChar += hasLowerCasedCharacters.length;
+    chanceLower = 1 / pwOptions.charClassesNum;
   }
   if (pwOptions.uppercase) {
-    allowedChars = allowedChars.concat(hasUpperCasedCharacters);
-    totalChars += hasUpperCasedCharacters.length;
+    totalChar += hasUpperCasedCharacters.length;
+    chanceUpper = 1 / pwOptions.charClassesNum;
   }
   if (pwOptions.numeric) {
-    allowedChars = allowedChars.concat(hasNumericCharacters);
-    totalChars += hasNumericCharacters.length;
+    totalChar += hasNumericCharacters.length;
+    chanceNumeric = 1 / pwOptions.charClassesNum;
   }
   if (pwOptions.special) {
-    allowedChars = allowedChars.concat(hasSpecialCharacters);
-    totalChars += hasSpecialCharacters.length;
+    totalChar += hasSpecialCharacters.length;
+    chanceSpecial = 1 / pwOptions.charClassesNum;
   }
 
-  // Gets randomized array
-  var randomCharArr = getRandom(allowedChars);
 
-  // Create password based no pwLength
-  var password= "";
+  var password = "";
   for (var i = 0; i < pwOptions.length; i++) {
-    var random = Math.floor(Math.random() * totalChars);
-    password = password + randomCharArr[random];
+    var random = Math.floor(Math.random() * totalChar);
+
+
+
+    if (random < (chanceLower * totalChar) && pwOptions.lowercase) {
+      password += hasLowerCasedCharacters[Math.floor(Math.random() * hasLowerCasedCharacters.length)]
+
+    } else if ((random < (chanceUpper * totalChar) * 2) && pwOptions.uppercase) {
+      password += hasUpperCasedCharacters[Math.floor(Math.random() * hasUpperCasedCharacters.length)]
+
+    } else if ((random < (chanceNumeric * totalChar) * 3) && pwOptions.numeric) {
+      password += hasNumericCharacters[Math.floor(Math.random() * hasNumericCharacters.length)]  
+
+    } else if (pwOptions.special) {
+      password += hasSpecialCharacters[Math.floor(Math.random() * hasSpecialCharacters.length)]  
+    }
   }
-  
+
+
   return password;
 }
 
