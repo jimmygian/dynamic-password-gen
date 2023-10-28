@@ -158,6 +158,7 @@ function getPasswordOptions() {
 // Function for getting a random element from an array
 function getRandom(arr) {
 
+  return "I will be returning an array of randomized chars."
 }
 
 
@@ -189,10 +190,13 @@ function generatePassword() {
     allowedChars = allowedChars.concat(hasSpecialCharacters)
   }
 
-  // Allowed chars
+  // Log allowed chars in console
   console.log("allowedChars:", allowedChars)
 
   
+  // Get randomized array
+  var randomCharArr = getRandom(allowedChars);
+  console.log("Random Char Array:", randomCharArr)
 
 
   return "WORKS!!"
