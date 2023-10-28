@@ -90,7 +90,15 @@ var upperCasedCharacters = [
 
 // Function to prompt user for password options
 function getPasswordOptions() {
+  // Get length of p/w user prefers, between 8 - 128 inclusive
+  
+  // Get prefered types (at least 1 of those char classes should be selected)
+    // lowercase
+    // UPPERCASE
+    // Numeric
+    // special chars
 
+  // return an onject with all user's p/w preferences
 }
 
 // Function for getting a random element from an array
@@ -100,7 +108,8 @@ function getRandom(arr) {
 
 // Function to generate password with user input
 function generatePassword() {
-
+  getPasswordOptions() 
+  return "WORKS!!"
 }
 
 // Get references to the #generate element
