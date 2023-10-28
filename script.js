@@ -114,9 +114,13 @@ function getPasswordOptions() {
   // Test pwLength output in console
   console.log("Password length is:", pwLength);
 
+  // Return if user canceled
+  if (pwLength === null) {
+    return null;
+  }
 
   // 2. Get prefered types (at least 1 of those char classes should be selected)
-    
+
     // lowercase
     var hasLowercase = confirm("Should password include lowercase?");
     console.log("hasLowercase:", hasLowercase);
@@ -129,7 +133,7 @@ function getPasswordOptions() {
     // Special chars
     var hasSpecial = confirm("Should password include special characters?");
     console.log("hasSpecial:", hasSpecial);
-
+  
 
   // 3. Return an object with all user's p/w preferences
   var pwOptions = {
@@ -139,7 +143,12 @@ function getPasswordOptions() {
     numeric: hasNumeric,
     special: hasSpecial
   };
-  console.log("'pwOptions' object:", pwOptions)
+
+  // Check if at least 1 char class was chosen, return null if none was.
+  if (pwOptions.lowercase === false && pwOptions.uppercase === false && pwOptions.numeric === false && pwOptions.special === false) {
+    alert("ERROR: At least 1 of the available character classes must be chosen. Please try again.")
+    return null;
+  }
   return pwOptions;
 }
 
@@ -153,7 +162,14 @@ function getRandom(arr) {
 
 // Function to generate password with user input
 function generatePassword() {
-  getPasswordOptions()
+  
+  // Get P/W options
+  var pwOptions = getPasswordOptions()
+  console.log("'pwOptions' object:", pwOptions)
+
+  
+
+
   return "WORKS!!"
 }
 
