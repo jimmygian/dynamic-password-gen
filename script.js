@@ -1,5 +1,5 @@
-// Array of special characters to be included in password
-var specialCharacters = [
+// Array of hasSpecial characters to be included in password
+var hasSpecialCharacters = [
   '@',
   '%',
   '+',
@@ -25,11 +25,11 @@ var specialCharacters = [
   '.'
 ];
 
-// Array of numeric characters to be included in password
-var numericCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+// Array of hasNumeric characters to be included in password
+var hasNumericCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-// Array of lowercase characters to be included in password
-var lowerCasedCharacters = [
+// Array of hasLowercase characters to be included in password
+var hasLowerCasedCharacters = [
   'a',
   'b',
   'c',
@@ -58,8 +58,8 @@ var lowerCasedCharacters = [
   'z'
 ];
 
-// Array of uppercase characters to be included in password
-var upperCasedCharacters = [
+// Array of hasUppercase characters to be included in password
+var hasUpperCasedCharacters = [
   'A',
   'B',
   'C',
@@ -111,18 +111,36 @@ function getPasswordOptions() {
       pwLength = prompt("Please insert a numberic value between 8 -128. Choose password length:");
     }
   }
-
   // Test pwLength output in console
-  console.log("Passworkd length is:", pwLength);
+  console.log("Password length is:", pwLength);
 
 
   // 2. Get prefered types (at least 1 of those char classes should be selected)
+    
     // lowercase
+    var hasLowercase = confirm("Should password include lowercase?");
+    console.log("hasLowercase:", hasLowercase);
     // UPPERCASE
+    var hasUppercase = confirm("Should password include uppercase?");
+    console.log("hasUppercase:", hasUppercase);
     // Numeric
-    // special chars
+    var hasNumeric = confirm("Should password include numeric values?");
+    console.log("hasNumeric:", hasNumeric);
+    // Special chars
+    var hasSpecial = confirm("Should password include special characters?");
+    console.log("hasSpecial:", hasSpecial);
 
-  // return an onject with all user's p/w preferences
+
+  // 3. Return an object with all user's p/w preferences
+  var pwOptions = {
+    length: pwLength,
+    lowercase: hasLowercase,
+    uppercase: hasUppercase,
+    numeric: hasNumeric,
+    special: hasSpecial
+  };
+  console.log("'pwOptions' object:", pwOptions)
+  return pwOptions;
 }
 
 
