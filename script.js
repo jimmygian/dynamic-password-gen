@@ -192,17 +192,22 @@ function generatePassword() {
   
   // Generates arr of acceptable chars
   var allowedChars = [];
+  var totalChars = 0;
   if (pwOptions.lowercase) {
     allowedChars = allowedChars.concat(hasLowerCasedCharacters)
+    totalChars += hasLowerCasedCharacters.length;
   }
   if (pwOptions.uppercase) {
     allowedChars = allowedChars.concat(hasUpperCasedCharacters)
+    totalChars += hasUpperCasedCharacters.length;
   }
   if (pwOptions.numeric) {
     allowedChars = allowedChars.concat(hasNumericCharacters)
+    totalChars += hasNumericCharacters.length;
   }
   if (pwOptions.special) {
     allowedChars = allowedChars.concat(hasSpecialCharacters)
+    totalChars += hasSpecialCharacters.length;
   }
 
   // Logs allowed chars in console
@@ -214,7 +219,15 @@ function generatePassword() {
   // console.log("allowedChars:", allowedChars)
 
 
-  return "WORKS!!"
+  // Create password based no pwLength
+  var password= "";
+  for (var i = 0; i < pwOptions.length; i++) {
+    var random = Math.floor(Math.random() * totalChars);
+    // console.log(random)
+    password = password + randomCharArr[random];
+  }
+  
+  return password;
 }
 
 // Get references to the #generate element
