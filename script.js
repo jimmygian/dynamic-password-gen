@@ -110,23 +110,18 @@ function getPasswordOptions() {
       pwLength = prompt("Please insert a numberic value between 8 -128. Choose password length:");
     }
   }
-
   // Returns if user canceled
   if (pwLength === null) {
     return null;
   }
 
   // Gets prefered types (at least 1 of those char classes should be selected)
-  // lowercase
   var hasLowercase = confirm("Should password include lowercase?");
-  // UPPERCASE
   var hasUppercase = confirm("Should password include uppercase?");
-  // Numeric
   var hasNumeric = confirm("Should password include numeric values?");
-  // Special chars
   var hasSpecial = confirm("Should password include special characters?");
 
-
+  // Get total number of allowed characters
   var charClasses = 0;
   if (hasLowercase) {
     charClasses++;
@@ -149,7 +144,7 @@ function getPasswordOptions() {
     uppercase: hasUppercase,
     numeric: hasNumeric,
     special: hasSpecial,
-    charClassesNum: charClasses
+    selectedClassesCount: charClasses
   };
 
   // Checks if at least 1 char class was chosen, return null if none was.
@@ -162,68 +157,82 @@ function getPasswordOptions() {
 
 
 
-// B) Function for getting a random element from an array
-function getRandom(arr) {
-  console.log(arr)
-
-  return [];
-}
-
-
-
-// C) Function to generate password with user input
+// B) Function to generate password based on user input
 function generatePassword() {
 
   // Gets P/W options, return if null
   var pwOptions = getPasswordOptions()
 
+  // Returns if user did not provide sufficient info
   if (pwOptions === null) {
     return "** Try again! **"
   }
 
-  // Get totalChar number
+  // Gets number of total allowed chars && Calculates chances percentage ( 0 - 1 is like 0% - 100%)
   var totalChar = 0;
-
-  //  Calculates chances
   var chanceLower = 0;
   var chanceUpper = 0;
   var chanceNumeric = 0;
   var chanceSpecial = 0;
 
+  var multiplyCount = 1;
+  var multiplyLower = 0;
+  var multiplyUpper = 0;
+  var multiplyNumeric = 0;
+  var multiplySpecial = 0;
+
+  // Depending on selected user classes, chances will be divided equally between them (1/3, 1/3, 1/3 or 1/2, 1/2 etc)
   if (pwOptions.lowercase) {
+    // Updates number of total allowed chars (we need it for the calculation below)
     totalChar += hasLowerCasedCharacters.length;
-    chanceLower = 1 / pwOptions.charClassesNum;
+    // Updates chances
+    chanceLower = 1 / pwOptions.selectedClassesCount;
+
+    multiplyLower = multiplyCount;
+    multiplyCount++;
   }
   if (pwOptions.uppercase) {
     totalChar += hasUpperCasedCharacters.length;
-    chanceUpper = 1 / pwOptions.charClassesNum;
+    chanceUpper = 1 / pwOptions.selectedClassesCount;
+
+    multiplyUpper = multiplyCount;
+    multiplyCount++;
   }
   if (pwOptions.numeric) {
     totalChar += hasNumericCharacters.length;
-    chanceNumeric = 1 / pwOptions.charClassesNum;
+    chanceNumeric = 1 / pwOptions.selectedClassesCount;
+
+    multiplyNumeric = multiplyCount;
+    multiplyCount++;
   }
   if (pwOptions.special) {
     totalChar += hasSpecialCharacters.length;
-    chanceSpecial = 1 / pwOptions.charClassesNum;
+    chanceSpecial = 1 / pwOptions.selectedClassesCount;
+
+    multiplySpecial = multiplyCount;
+    multiplyCount++;
   }
 
-
+  
   var password = "";
+
   for (var i = 0; i < pwOptions.length; i++) {
     var random = Math.floor(Math.random() * totalChar);
 
 
-
-    if (random < (chanceLower * totalChar) && pwOptions.lowercase) {
+    // Formula: random number between 0-1 * length of total acceptable chars * multiplier (if it's 1st in line should be 1, if second it should be 2 etc.)
+    if (random < (chanceLower * totalChar * multiplyLower) && pwOptions.lowercase) {
+      // Formula: Random num between 0 and 1 multiplied by specified length = Random number between 0 and length
+      // Math.floor() is used to round decimal
       password += hasLowerCasedCharacters[Math.floor(Math.random() * hasLowerCasedCharacters.length)]
 
-    } else if ((random < (chanceUpper * totalChar) * 2) && pwOptions.uppercase) {
+    } else if (random < (chanceUpper * totalChar * multiplyUpper) && pwOptions.uppercase) {
       password += hasUpperCasedCharacters[Math.floor(Math.random() * hasUpperCasedCharacters.length)]
 
-    } else if ((random < (chanceNumeric * totalChar) * 3) && pwOptions.numeric) {
+    } else if (random < (chanceNumeric * totalChar * multiplyNumeric) && pwOptions.numeric) {
       password += hasNumericCharacters[Math.floor(Math.random() * hasNumericCharacters.length)]  
 
-    } else if (pwOptions.special) {
+    } else if (random < (chanceSpecial * totalChar * multiplySpecial) && pwOptions.special) {
       password += hasSpecialCharacters[Math.floor(Math.random() * hasSpecialCharacters.length)]  
     }
   }
