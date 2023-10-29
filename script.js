@@ -187,20 +187,26 @@ function getPassword(userOptions) {
     return "Percentage Exceeds 100%";
   } else if (totalPercentage < 100) {
     if (countNaN === 0) {
-      return "Percentages must total 100%. To automatically calculate, leave one or more fields blank.";
+      return "Percentages must total 100%. To automatically calculate, leave one or more selected fields blank.";
     }
 
+    var newPercentage = totalPercentage;
     for (element in userOptions.selectedClasses) {
       if (isNaN(userOptions.selectedClasses[element][1])) {
-        userOptions.selectedClasses[element][1] = (100 - totalPercentage) / countNaN;
+        userOptions.selectedClasses[element][1] = Math.ceil((100 - totalPercentage) / countNaN);
+        newPercentage += userOptions.selectedClasses[element][1];
       }
+      if (newPercentage > 100) {
+        var subtract = newPercentage - 100;
+        userOptions.selectedClasses[element][1] -= subtract;
+      }
+      
     }
   } else {
     if (countNaN !== 0) {
       return "Percentages must total 100%. There is no room for percentage auto-completion without exceeding 100%."
     }
   }
-
   // multiplyLower = 1;
   // multiplyUpper = 1;
   // multiplyNumeric = 1;
