@@ -243,14 +243,44 @@ function getPassword(prefs) {
 }
 
 
+// C) CHECK IF str INCLUDES AT LEAST 1 CHAR FROM arr
 
-// C) GENERATE PASSWORD
+function includesChar(str, arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (str.includes(arr[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+
+// D) PUT ALL COMMANDS TOGETHER AND GENERATE PASSWORD
 
 function generatePassword() {
 
   // Gets P/W prefs, return if null
   var prefs = getPasswordOptions();
-  var password = getPassword(prefs);
+
+  // Creates var to store password
+  var password;
+  
+  while (true) {
+    // Creates password
+    password = getPassword(prefs);
+    
+    // Checks if password includes all user's specified char classes
+    if (
+      (!prefs.lowercase || includesChar(password, hasLowerCasedCharacters)) &&
+      (!prefs.uppercase || includesChar(password, hasUpperCasedCharacters)) &&
+      (!prefs.numeric || includesChar(password, hasNumericCharacters)) &&
+      (!prefs.special || includesChar(password, hasSpecialCharacters))
+    ) {
+      // Breaks out of the loop if all criteria is met
+      break;
+    }
+  }
 
   return password;
 }
