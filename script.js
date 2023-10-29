@@ -1,3 +1,6 @@
+// GLOBAL VARIABLES //
+
+
 // Array of hasSpecial characters to be included in password
 var hasSpecialCharacters = [
   '@',
@@ -91,7 +94,12 @@ var hasUpperCasedCharacters = [
 // ==================================== //
 
 
-// A) Function to prompt user for password options
+
+// ALGORITHM //
+
+
+// A) GET USER PREFERENCES 
+
 function getPasswordOptions() {
 
   // Gets length of p/w user prefers, between 8 - 128 inclusive
@@ -107,7 +115,7 @@ function getPasswordOptions() {
       break;
     } else {
       // Re-prompts if user input is incorrect
-      pwLength = prompt("Please insert a numberic value between 8 -128. Choose password length:");
+      pwLength = prompt("Please insert a numberic value between 8 - 128. Choose password length:");
     }
   }
   // Returns if user canceled
@@ -121,7 +129,7 @@ function getPasswordOptions() {
   var hasNumeric = confirm("Should password include numeric values?");
   var hasSpecial = confirm("Should password include special characters?");
 
-  // Get total number of allowed characters
+  // Get total number of allowed character classes
   var charClasses = 0;
   if (hasLowercase) {
     charClasses++;
@@ -136,9 +144,8 @@ function getPasswordOptions() {
     charClasses++;
   }
 
-
   // Returns an object with all user's p/w preferences
-  var pwOptions = {
+  var pwPrefs = {
     length: pwLength,
     lowercase: hasLowercase,
     uppercase: hasUppercase,
@@ -148,23 +155,20 @@ function getPasswordOptions() {
   };
 
   // Checks if at least 1 char class was chosen, return null if none was.
-  if (pwOptions.lowercase === false && pwOptions.uppercase === false && pwOptions.numeric === false && pwOptions.special === false) {
+  if (pwPrefs.lowercase === false && pwPrefs.uppercase === false && pwPrefs.numeric === false && pwPrefs.special === false) {
     alert("ERROR: At least 1 of the available character classes must be chosen. Please try again.")
     return null;
   }
-  return pwOptions;
+  return pwPrefs;
 }
 
 
+// B) GET PASSWORD STRING
 
-// B) Function to generate password based on user input
-function generatePassword() {
-
-  // Gets P/W options, return if null
-  var pwOptions = getPasswordOptions()
+function getPassword(prefs) {
 
   // Returns if user did not provide sufficient info
-  if (pwOptions === null) {
+  if (prefs === null) {
     return "** Try again! **"
   }
 
@@ -181,61 +185,72 @@ function generatePassword() {
   var multiplySpecial = 0;
 
   // Depending on selected user classes, chances will be divided equally between them (1/3, 1/3, 1/3 or 1/2, 1/2 etc)
-  if (pwOptions.lowercase) {
+  if (prefs.lowercase) {
     // Updates chances
-    chanceLower = 1 / pwOptions.selectedClassesCount;
-
+    chanceLower = 1 / prefs.selectedClassesCount;
+    // Updates multiplier
     multiplyLower = multiplyCount;
     multiplyCount++;
   }
-  if (pwOptions.uppercase) {
-    chanceUpper = 1 / pwOptions.selectedClassesCount;
-
+  if (prefs.uppercase) {
+    chanceUpper = 1 / prefs.selectedClassesCount;
     multiplyUpper = multiplyCount;
     multiplyCount++;
   }
-  if (pwOptions.numeric) {
-    chanceNumeric = 1 / pwOptions.selectedClassesCount;
-
+  if (prefs.numeric) {
+    chanceNumeric = 1 / prefs.selectedClassesCount;
     multiplyNumeric = multiplyCount;
     multiplyCount++;
   }
-  if (pwOptions.special) {
-    chanceSpecial = 1 / pwOptions.selectedClassesCount;
-
+  if (prefs.special) {
+    chanceSpecial = 1 / prefs.selectedClassesCount;
     multiplySpecial = multiplyCount;
     multiplyCount++;
   }
 
-  
   var password = "";
   var percentage = 100;
-  for (var i = 0; i < pwOptions.length; i++) {
+  for (var i = 0; i < prefs.length; i++) {
     var random = Math.floor(Math.random() * percentage);
     console.log("Random:", random);
 
 
-    // Formula: random number between 0-1 * length of total acceptable chars * multiplier (if it's 1st in line should be 1, if second it should be 2 etc.)
-    if (random < (chanceLower * percentage * multiplyLower) && pwOptions.lowercase) {
+    // Formula: random number between 0-1 * 100 * multiplier (depending on which one is first in the if statement)
+    // e.g. Let's suppose user wants all 4 char classes:
+    // It basically needs to be if random between 0 - 25 choose lower, else if between 25 -50 choose upper, else if 50 -75, else if 75 -100
+
+    if (random < (chanceLower * percentage * multiplyLower) && prefs.lowercase) {
       // Formula: Random num between 0 and 1 multiplied by specified length = Random number between 0 and length
       // Math.floor() is used to round decimal
       console.log("chanceLower:", chanceLower * percentage * multiplyLower);
       password += hasLowerCasedCharacters[Math.floor(Math.random() * hasLowerCasedCharacters.length)]
 
-    } else if (random < (chanceUpper * percentage * multiplyUpper) && pwOptions.uppercase) {
+    } else if (random < (chanceUpper * percentage * multiplyUpper) && prefs.uppercase) {
       console.log("chanceUpper:", chanceUpper * percentage * multiplyUpper);
       password += hasUpperCasedCharacters[Math.floor(Math.random() * hasUpperCasedCharacters.length)]
 
-    } else if (random < (chanceNumeric * percentage * multiplyNumeric) && pwOptions.numeric) {
+    } else if (random < (chanceNumeric * percentage * multiplyNumeric) && prefs.numeric) {
       console.log("chanceNumeric:", chanceNumeric * percentage * multiplyNumeric);
       password += hasNumericCharacters[Math.floor(Math.random() * hasNumericCharacters.length)]  
 
-    } else if (random < (chanceSpecial * percentage * multiplySpecial) && pwOptions.special) {
+    } else if (random < (chanceSpecial * percentage * multiplySpecial) && prefs.special) {
       console.log("chanceSpecial:", chanceSpecial * percentage * multiplySpecial);
       password += hasSpecialCharacters[Math.floor(Math.random() * hasSpecialCharacters.length)]  
     }
   }
 
+  return password;
+}
+
+
+
+// C) GENERATE PASSWORD
+
+function generatePassword() {
+
+  // Gets P/W prefs, return if null
+  var prefs = getPasswordOptions();
+  var password = getPassword(prefs);
 
   return password;
 }
@@ -244,6 +259,11 @@ function generatePassword() {
 
 
 // ==================================== //
+
+
+
+// EVENT LISTENERS/ SELECTORS //
+
 
 // Get references to the #generate element
 var generateBtn = document.querySelector('#generate');
