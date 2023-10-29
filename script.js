@@ -307,12 +307,12 @@ function getPassword(userOptions) {
 // C) CHECK IF str INCLUDES AT LEAST 1 CHAR FROM arr
 
 function includesChar(str, arr) {
-  // for (var i = 0; i < arr.length; i++) {
-  //   if (str.includes(arr[i])) {
-  //     return true;
-  //   }
-  // }
-  // return false;
+  for (var i = 0; i < arr.length; i++) {
+    if (str.includes(arr[i])) {
+      return true;
+    }
+  }
+  return false;
 }
 
 
@@ -324,24 +324,28 @@ function generatePassword() {
   // Gets P/W userOptions, return if null
   var userOptions = getPasswordOptions();
 
-  // // Creates var to store password
-  // var password;
+  if (userOptions.pwLength < 8 || userOptions.pwLength > 128) {
+    return "Password length must be between 8 - 128 characters. Please try again."
+  }
 
-  // while (true) {
-  //   // Creates password
-  var password = getPassword(userOptions);
+  // Creates var to store password
+  var password;
 
-  //   // Checks if password includes all user's specified char classes
-  //   if (
-  //     (!userOptions.lowercase || includesChar(password, hasLowerCasedCharacters)) &&
-  //     (!userOptions.uppercase || includesChar(password, hasUpperCasedCharacters)) &&
-  //     (!userOptions.numeric || includesChar(password, hasNumericCharacters)) &&
-  //     (!userOptions.special || includesChar(password, hasSpecialCharacters))
-  //   ) {
-  //     // Breaks out of the loop if all criteria is met
-  //     break;
-  //   }
-  // }
+  while (true) {
+    // Creates password
+  password = getPassword(userOptions);
+
+    // Checks if password includes all user's specified char classes
+    if (
+      (!userOptions.lower || includesChar(password, hasLowerCasedCharacters)) &&
+      (!userOptions.upper || includesChar(password, hasUpperCasedCharacters)) &&
+      (!userOptions.numeric || includesChar(password, hasNumericCharacters)) &&
+      (!userOptions.special || includesChar(password, hasSpecialCharacters))
+    ) {
+      // Breaks out of the loop if all criteria is met
+      break;
+    }
+  }
 
   return password;
 }
