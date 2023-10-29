@@ -102,6 +102,27 @@ var hasUpperCasedCharacters = [
 
 function getPasswordOptions() {
 
+  // Select option Checkboxes
+  var optionCheckboxes = document.querySelectorAll('.option-checkbox');
+  
+  var userSelections = {};
+
+  // Iterate through the checkboxes to determine which ones are checked and get associated percentages
+  optionCheckboxes.forEach(function(checkbox) {
+    const name = checkbox.getAttribute("name");
+    const isChecked = checkbox.checked;
+    const percentInput = checkbox.nextElementSibling.nextElementSibling;
+    const percent = percentInput.value;
+
+    if (isChecked) {
+      userSelections[name] = percent;
+    }
+  });
+
+  console.log(userSelections);
+
+
+
   // Gets length of p/w user prefers, between 8 - 128 inclusive
   var pwLength = prompt("Choose password length (between 8 - 128 chars):");
 

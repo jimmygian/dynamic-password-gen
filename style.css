@@ -162,9 +162,25 @@ button[disabled] {
   width: 40px;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 4px;
+  text-align: center;
 }
 
-
+/* length */
+.length-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px;
+  padding: 2px 10px;
+}
+.length-container [type="text"] {
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4px;
+  width: 50px;
+  padding: 2px 2px;
+  margin: 1px 5px;
+  text-align: center;
+}
 
 
 
