@@ -169,7 +169,6 @@ function generatePassword() {
   }
 
   // Gets number of total allowed chars && Calculates chances percentage ( 0 - 1 is like 0% - 100%)
-  var totalChar = 0;
   var chanceLower = 0;
   var chanceUpper = 0;
   var chanceNumeric = 0;
@@ -183,8 +182,6 @@ function generatePassword() {
 
   // Depending on selected user classes, chances will be divided equally between them (1/3, 1/3, 1/3 or 1/2, 1/2 etc)
   if (pwOptions.lowercase) {
-    // Updates number of total allowed chars (we need it for the calculation below)
-    totalChar += hasLowerCasedCharacters.length;
     // Updates chances
     chanceLower = 1 / pwOptions.selectedClassesCount;
 
@@ -192,21 +189,18 @@ function generatePassword() {
     multiplyCount++;
   }
   if (pwOptions.uppercase) {
-    totalChar += hasUpperCasedCharacters.length;
     chanceUpper = 1 / pwOptions.selectedClassesCount;
 
     multiplyUpper = multiplyCount;
     multiplyCount++;
   }
   if (pwOptions.numeric) {
-    totalChar += hasNumericCharacters.length;
     chanceNumeric = 1 / pwOptions.selectedClassesCount;
 
     multiplyNumeric = multiplyCount;
     multiplyCount++;
   }
   if (pwOptions.special) {
-    totalChar += hasSpecialCharacters.length;
     chanceSpecial = 1 / pwOptions.selectedClassesCount;
 
     multiplySpecial = multiplyCount;
@@ -215,24 +209,29 @@ function generatePassword() {
 
   
   var password = "";
-
+  var percentage = 100;
   for (var i = 0; i < pwOptions.length; i++) {
-    var random = Math.floor(Math.random() * totalChar);
+    var random = Math.floor(Math.random() * percentage);
+    console.log("Random:", random);
 
 
     // Formula: random number between 0-1 * length of total acceptable chars * multiplier (if it's 1st in line should be 1, if second it should be 2 etc.)
-    if (random < (chanceLower * totalChar * multiplyLower) && pwOptions.lowercase) {
+    if (random < (chanceLower * percentage * multiplyLower) && pwOptions.lowercase) {
       // Formula: Random num between 0 and 1 multiplied by specified length = Random number between 0 and length
       // Math.floor() is used to round decimal
+      console.log("chanceLower:", chanceLower * percentage * multiplyLower);
       password += hasLowerCasedCharacters[Math.floor(Math.random() * hasLowerCasedCharacters.length)]
 
-    } else if (random < (chanceUpper * totalChar * multiplyUpper) && pwOptions.uppercase) {
+    } else if (random < (chanceUpper * percentage * multiplyUpper) && pwOptions.uppercase) {
+      console.log("chanceUpper:", chanceUpper * percentage * multiplyUpper);
       password += hasUpperCasedCharacters[Math.floor(Math.random() * hasUpperCasedCharacters.length)]
 
-    } else if (random < (chanceNumeric * totalChar * multiplyNumeric) && pwOptions.numeric) {
+    } else if (random < (chanceNumeric * percentage * multiplyNumeric) && pwOptions.numeric) {
+      console.log("chanceNumeric:", chanceNumeric * percentage * multiplyNumeric);
       password += hasNumericCharacters[Math.floor(Math.random() * hasNumericCharacters.length)]  
 
-    } else if (random < (chanceSpecial * totalChar * multiplySpecial) && pwOptions.special) {
+    } else if (random < (chanceSpecial * percentage * multiplySpecial) && pwOptions.special) {
+      console.log("chanceSpecial:", chanceSpecial * percentage * multiplySpecial);
       password += hasSpecialCharacters[Math.floor(Math.random() * hasSpecialCharacters.length)]  
     }
   }
