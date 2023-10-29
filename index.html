@@ -37,26 +37,26 @@
           <div class="option-item">
             <input class="option-checkbox" type="checkbox" name="option-lower" id="lower-case" checked>
             <label for="lower-case">a-z</label>
-            <input type="text" name="option-lower-percent" placeholder="%"><br>
+            <input class="option-input" type="number" name="option-lower-percent" min="0" max="100" placeholder="%"><br>
           </div>
 
           <div class="option-item">
             <input class="option-checkbox" type="checkbox" name="option-upper" id="upper-case" checked>
             <label for="upper-case">A-Z</label>
-            <input type="text" name="option-upper-percent" placeholder="%"><br>
+            <input class="option-input" type="number" name="option-upper-percent" min="0" max="100" placeholder="%"><br>
           </div>
 
 
           <div class="option-item">
             <input class="option-checkbox" type="checkbox" name="option-numeric" id="numeric" checked>
             <label for="numeric">1-9</label>
-            <input type="text" name="option-numeric-percent" placeholder="%"><br>
+            <input class="option-input" type="number" name="option-numeric-percent" min="0" max="100" placeholder="%"><br>
           </div>
           
           <div class="option-item">
             <input class="option-checkbox" type="checkbox" name="option-special" id="special" checked>
             <label for="special">!@^..</label>
-            <input type="text" name="option-special-percent" placeholder="%"><br>
+            <input class="option-input" type="number" name="option-special-percent" min="0" max="100" placeholder="%"><br>
           </div>
 
           
@@ -64,7 +64,7 @@
 
         <div class="length-container">
           <label for="option-special-percent">Password length:</label>
-          <input id="pw-length" type="text" name="option-special-percent" placeholder="8 - 128"><br>
+          <input id="pw-length" type="number" name="option-special-percent" placeholder="8 - 128"><br>
         </div>
 
         <button id="generate" class="btn">Generate Password</button>

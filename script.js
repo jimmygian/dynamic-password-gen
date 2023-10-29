@@ -115,16 +115,27 @@ function getPasswordOptions() {
     const percent = percentInput.value;
 
     if (isChecked) {
-      userSelections[name] = percent;
+      userSelections[name] = [true, parseInt(percent)];
+    } else {
+      userSelections[name] = [false, 0];
     }
   });
 
   console.log(userSelections);
+  console.log(userSelections['option-lower'][0]);
+
 
 
 
   // Gets length of p/w user prefers, between 8 - 128 inclusive
-  var pwLength = prompt("Choose password length (between 8 - 128 chars):");
+  var lengthInput = document.querySelector('#pw-length');
+  var pwLength = lengthInput.value;
+
+  if (pwLength === "") {
+    pwLength === null;
+  } else {
+    pwLength = parseInt(pwLength);
+  }
 
   // Evaluates user input:
   while (pwLength !== null) {
@@ -145,24 +156,25 @@ function getPasswordOptions() {
   }
 
   // Gets prefered types (at least 1 of those char classes should be selected)
-  var hasLowercase = confirm("Should password include lowercase?");
-  var hasUppercase = confirm("Should password include uppercase?");
-  var hasNumeric = confirm("Should password include numeric values?");
-  var hasSpecial = confirm("Should password include special characters?");
+  var hasLowercase = userSelections['option-lower'][0];
+  var hasUppercase = userSelections['option-upper'][0];
+  var hasNumeric = userSelections['option-numeric'][0];
+  var hasSpecial = userSelections['option-special'][0];
 
-  // Get total number of allowed character classes
-  var charClasses = 0;
+
+  // Get total number of selected classes
+  var selectedClasses = 0;
   if (hasLowercase) {
-    charClasses++;
+    selectedClasses++;
   }
   if (hasUppercase) {
-    charClasses++;
+    selectedClasses++;
   }
   if (hasNumeric) {
-    charClasses++;
+    selectedClasses++;
   }
   if (hasSpecial) {
-    charClasses++;
+    selectedClasses++;
   }
 
   // Returns an object with all user's p/w preferences
@@ -172,7 +184,7 @@ function getPasswordOptions() {
     uppercase: hasUppercase,
     numeric: hasNumeric,
     special: hasSpecial,
-    selectedClassesCount: charClasses
+    selectedClassesCount: selectedClasses
   };
 
   // Checks if at least 1 char class was chosen, return null if none was.
