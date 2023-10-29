@@ -146,8 +146,23 @@ button[disabled] {
 }
 
 
+/* Options Container */
 
+.options-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-direction: row;
+}
+.option-item {
+  margin: 3px;
+}
 
+.option-item input[type="text"] {
+  width: 40px;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4px;
+}
 
 
 
@@ -165,10 +180,15 @@ button[disabled] {
   #password {
     font-size: 1rem;
   }
+
 }
 
-@media (max-width: 500px) {
+@media (max-width: 545px) {
   .btn {
     font-size: 0.8rem;
   }
+  .options-container {
+    flex-direction: column;
+  }
 }
+
