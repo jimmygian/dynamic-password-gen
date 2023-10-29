@@ -104,27 +104,23 @@ function getPasswordOptions() {
 
   // Select option Checkboxes
   var optionCheckboxes = document.querySelectorAll('.option-checkbox');
-  
-  var userSelections = {};
 
+  var useruserOptionsInput = {};
+  var charClassesBool = []
   // Iterate through the checkboxes to determine which ones are checked and get associated percentages
-  optionCheckboxes.forEach(function(checkbox) {
+  optionCheckboxes.forEach(function (checkbox) {
     const name = checkbox.getAttribute("name");
     const isChecked = checkbox.checked;
     const percentInput = checkbox.nextElementSibling.nextElementSibling;
     const percent = percentInput.value;
 
     if (isChecked) {
-      userSelections[name] = [true, parseInt(percent)];
+      useruserOptionsInput[name] = [isChecked, parseInt(percent)];
+      charClassesBool.push(isChecked);
     } else {
-      userSelections[name] = [false, 0];
+      charClassesBool.push(isChecked);
     }
   });
-
-  console.log(userSelections);
-  console.log(userSelections['option-lower'][0]);
-
-
 
 
   // Gets length of p/w user prefers, between 8 - 128 inclusive
@@ -137,114 +133,146 @@ function getPasswordOptions() {
     pwLength = parseInt(pwLength);
   }
 
-  // Evaluates user input:
-  while (pwLength !== null) {
-    // Tries to make user input a number
-    pwLength = parseInt(pwLength);
-
-    if (pwLength >= 8 && pwLength <= 128 && !isNaN(pwLength)) {
-      // Breaks if user input is correct
-      break;
-    } else {
-      // Re-prompts if user input is incorrect
-      pwLength = prompt("Please insert a numberic value between 8 - 128. Choose password length:");
-    }
-  }
-  // Returns if user canceled
-  if (pwLength === null) {
-    return null;
-  }
-
-  // Gets prefered types (at least 1 of those char classes should be selected)
-  var hasLowercase = userSelections['option-lower'][0];
-  var hasUppercase = userSelections['option-upper'][0];
-  var hasNumeric = userSelections['option-numeric'][0];
-  var hasSpecial = userSelections['option-special'][0];
-
-
   // Get total number of selected classes
-  var selectedClasses = 0;
-  if (hasLowercase) {
-    selectedClasses++;
-  }
-  if (hasUppercase) {
-    selectedClasses++;
-  }
-  if (hasNumeric) {
-    selectedClasses++;
-  }
-  if (hasSpecial) {
-    selectedClasses++;
-  }
+  var selectedClassesCount = Object.keys(useruserOptionsInput).length;
 
-  // Returns an object with all user's p/w preferences
-  var pwPrefs = {
-    length: pwLength,
-    lowercase: hasLowercase,
-    uppercase: hasUppercase,
-    numeric: hasNumeric,
-    special: hasSpecial,
-    selectedClassesCount: selectedClasses
+  // Creates Object
+  var userOptions = {
+    selectedClasses: useruserOptionsInput,
+    pwLength: pwLength,
+    selectedClassesCount: selectedClassesCount,
+    lower: charClassesBool[0],
+    upper: charClassesBool[1],
+    numeric: charClassesBool[2],
+    special: charClassesBool[3]
   };
 
-  // Checks if at least 1 char class was chosen, return null if none was.
-  if (pwPrefs.lowercase === false && pwPrefs.uppercase === false && pwPrefs.numeric === false && pwPrefs.special === false) {
-    alert("ERROR: At least 1 of the available character classes must be chosen. Please try again.")
-    return null;
-  }
-  return pwPrefs;
+  console.log(userOptions);
+
+  return userOptions;
 }
+
+
 
 
 // B) GET PASSWORD STRING
 
-function getPassword(prefs) {
+function getPassword(userOptions) {
 
-  // Returns if user did not provide sufficient info
-  if (prefs === null) {
-    return "** Try again! **"
+  // If all false, return
+  if (!userOptions.lower && !userOptions.upper && !userOptions.numeric && !userOptions.special) {
+    return "Please select at least one of the character classes below."
   }
 
-  // Gets number of total allowed chars && Calculates chances percentage ( 0 - 1 is like 0% - 100%)
-  var chanceLower = 0;
-  var chanceUpper = 0;
-  var chanceNumeric = 0;
-  var chanceSpecial = 0;
+  // Calculates number of NaN and Total Percentage the user specified
+  var countNaN = 0;
+  var totalPercentage = 0;
 
+  var lower = 0;
+  var upper = 0;
+  var numeric = 0;
+  var special = 0;
+
+  for (element in userOptions.selectedClasses) {
+
+    if (isNaN(userOptions.selectedClasses[element][1])) {
+      countNaN++;
+    } else {
+      totalPercentage += userOptions.selectedClasses[element][1];
+    }
+  }
+
+
+  if (totalPercentage > 100) {
+    return "Percentage Exceeds 100%";
+  } else if (totalPercentage < 100) {
+    if (countNaN === 0) {
+      return "Percentages must total 100%. To automatically calculate, leave one or more fields blank.";
+    }
+
+    for (element in userOptions.selectedClasses) {
+      if (isNaN(userOptions.selectedClasses[element][1])) {
+        userOptions.selectedClasses[element][1] = (100 - totalPercentage) / countNaN;
+      }
+    }
+  } else {
+    if (countNaN !== 0) {
+      return "Percentages must total 100%. There is no room for percentage auto-completion without exceeding 100%."
+    }
+  }
+
+  // multiplyLower = 1;
+  // multiplyUpper = 1;
+  // multiplyNumeric = 1;
+  // multiplySpecial = 1;
+  // multiplyCount = 1;
+
+  for (element in userOptions.selectedClasses) {
+
+    if ("lower" in userOptions.selectedClasses) {
+      lower = userOptions.selectedClasses["lower"][1];
+      // multiplyLower = multiplyLower * multiplyCount;
+    }
+    if ("upper" in userOptions.selectedClasses) {
+      upper = userOptions.selectedClasses["upper"][1];
+    }
+    if ("numeric" in userOptions.selectedClasses) {
+      numeric = userOptions.selectedClasses["numeric"][1];
+    }
+    if ("special" in userOptions.selectedClasses) {
+      special = userOptions.selectedClasses["special"][1];
+    }
+  }
+
+  // Store multiply count
+  var multiplyLower = 1;
+  var multiplyUpper = 1;
+  var multiplyNumeric = 1;
+  var multiplySpecial = 1;
   var multiplyCount = 1;
-  var multiplyLower = 0;
-  var multiplyUpper = 0;
-  var multiplyNumeric = 0;
-  var multiplySpecial = 0;
 
-  // Depending on selected user classes, chances will be divided equally between them (1/3, 1/3, 1/3 or 1/2, 1/2 etc)
-  if (prefs.lowercase) {
-    // Updates chances
-    chanceLower = 1 / prefs.selectedClassesCount;
-    // Updates multiplier
-    multiplyLower = multiplyCount;
+  if (userOptions.lower) {
+    multiplyLower *= multiplyCount;
     multiplyCount++;
   }
-  if (prefs.uppercase) {
-    chanceUpper = 1 / prefs.selectedClassesCount;
-    multiplyUpper = multiplyCount;
+  if (userOptions.upper) {
+    multiplyUpper *= multiplyCount;
     multiplyCount++;
   }
-  if (prefs.numeric) {
-    chanceNumeric = 1 / prefs.selectedClassesCount;
-    multiplyNumeric = multiplyCount;
+  if (userOptions.numeric) {
+    multiplyNumeric *= multiplyCount;
     multiplyCount++;
   }
-  if (prefs.special) {
-    chanceSpecial = 1 / prefs.selectedClassesCount;
-    multiplySpecial = multiplyCount;
+  if (userOptions.special) {
+    multiplySpecial *= multiplyCount;
     multiplyCount++;
   }
+  
+
+
+  // console.log("Count NaN:", countNaN);
+  // console.log("Total Percentage:", totalPercentage);
+
+  // console.log("========================")
+
+  // for ( element in userOptions.selectedClasses) {
+  //   console.log(element)
+  //   console.log(userOptions.selectedClasses[element][1])
+  // }
+  console.log("lower:", lower)
+  console.log("upper:", upper)
+  console.log("numeric:", numeric)
+  console.log("special:", special)
+
+
 
   var password = "";
-  var percentage = 100;
-  for (var i = 0; i < prefs.length; i++) {
-    var random = Math.floor(Math.random() * percentage);
+  var percentage = 1;
+
+
+  for (var i = 0; i < userOptions.pwLength; i++) {
+    // Gets a number between 0 - 100
+    var random = Math.floor(Math.random() * 100);
     console.log("Random:", random);
 
 
@@ -252,23 +280,23 @@ function getPassword(prefs) {
     // e.g. Let's suppose user wants all 4 char classes:
     // It basically needs to be if random between 0 - 25 choose lower, else if between 25 -50 choose upper, else if 50 -75, else if 75 -100
 
-    if (random < (chanceLower * percentage * multiplyLower) && prefs.lowercase) {
+    if (random < (lower) && userOptions.lower) {
       // Formula: Random num between 0 and 1 multiplied by specified length = Random number between 0 and length
       // Math.floor() is used to round decimal
-      console.log("chanceLower:", chanceLower * percentage * multiplyLower);
+      console.log("lowerPercentage:", lower);
       password += hasLowerCasedCharacters[Math.floor(Math.random() * hasLowerCasedCharacters.length)]
 
-    } else if (random < (chanceUpper * percentage * multiplyUpper) && prefs.uppercase) {
-      console.log("chanceUpper:", chanceUpper * percentage * multiplyUpper);
+    } else if (random < (lower + upper) && userOptions.upper) {
+      console.log("upperPercentage:", lower + upper);
       password += hasUpperCasedCharacters[Math.floor(Math.random() * hasUpperCasedCharacters.length)]
 
-    } else if (random < (chanceNumeric * percentage * multiplyNumeric) && prefs.numeric) {
-      console.log("chanceNumeric:", chanceNumeric * percentage * multiplyNumeric);
-      password += hasNumericCharacters[Math.floor(Math.random() * hasNumericCharacters.length)]  
+    } else if (random < (lower + upper + numeric) && userOptions.numeric) {
+      console.log("numPercentage:", lower + upper + numeric);
+      password += hasNumericCharacters[Math.floor(Math.random() * hasNumericCharacters.length)]
 
-    } else if (random < (chanceSpecial * percentage * multiplySpecial) && prefs.special) {
-      console.log("chanceSpecial:", chanceSpecial * percentage * multiplySpecial);
-      password += hasSpecialCharacters[Math.floor(Math.random() * hasSpecialCharacters.length)]  
+    } else if (random < (lower + upper + numeric + special) && userOptions.special) {
+      console.log("specialPercentage:", lower + upper + numeric + special);
+      password += hasSpecialCharacters[Math.floor(Math.random() * hasSpecialCharacters.length)]
     }
   }
 
@@ -279,12 +307,12 @@ function getPassword(prefs) {
 // C) CHECK IF str INCLUDES AT LEAST 1 CHAR FROM arr
 
 function includesChar(str, arr) {
-  for (var i = 0; i < arr.length; i++) {
-    if (str.includes(arr[i])) {
-      return true;
-    }
-  }
-  return false;
+  // for (var i = 0; i < arr.length; i++) {
+  //   if (str.includes(arr[i])) {
+  //     return true;
+  //   }
+  // }
+  // return false;
 }
 
 
@@ -293,27 +321,27 @@ function includesChar(str, arr) {
 
 function generatePassword() {
 
-  // Gets P/W prefs, return if null
-  var prefs = getPasswordOptions();
+  // Gets P/W userOptions, return if null
+  var userOptions = getPasswordOptions();
 
-  // Creates var to store password
-  var password;
-  
-  while (true) {
-    // Creates password
-    password = getPassword(prefs);
-    
-    // Checks if password includes all user's specified char classes
-    if (
-      (!prefs.lowercase || includesChar(password, hasLowerCasedCharacters)) &&
-      (!prefs.uppercase || includesChar(password, hasUpperCasedCharacters)) &&
-      (!prefs.numeric || includesChar(password, hasNumericCharacters)) &&
-      (!prefs.special || includesChar(password, hasSpecialCharacters))
-    ) {
-      // Breaks out of the loop if all criteria is met
-      break;
-    }
-  }
+  // // Creates var to store password
+  // var password;
+
+  // while (true) {
+  //   // Creates password
+  var password = getPassword(userOptions);
+
+  //   // Checks if password includes all user's specified char classes
+  //   if (
+  //     (!userOptions.lowercase || includesChar(password, hasLowerCasedCharacters)) &&
+  //     (!userOptions.uppercase || includesChar(password, hasUpperCasedCharacters)) &&
+  //     (!userOptions.numeric || includesChar(password, hasNumericCharacters)) &&
+  //     (!userOptions.special || includesChar(password, hasSpecialCharacters))
+  //   ) {
+  //     // Breaks out of the loop if all criteria is met
+  //     break;
+  //   }
+  // }
 
   return password;
 }
