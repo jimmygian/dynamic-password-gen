@@ -32,8 +32,9 @@
       <!-- Card Instructions -->
       <div class="card-instructions">
         <p>
-          Instructions: Choose between 4 character classes. Optionally insert a possibility percentage between 1-100%. 
-          Note that the total percentage of the selected character classes must not exceed 100% 
+          <b>Instructions:</b> Select up to 4 character classes and specify an optional percentage (1-100%) for each class. 
+          Ensure the combined percentage allocation for selected classes doesn't exceed 100%. 
+          Unspecified percentages will be automatically calculated.
         </p>
       </div>
       <!-- Card footer -->
@@ -70,7 +71,7 @@
 
         <div class="length-container">
           <label for="option-special-percent">Password length:</label>
-          <input id="pw-length" type="number" name="option-special-percent" placeholder="8 - 128"><br>
+          <input id="pw-length" type="number" name="option-special-percent" min="8" max="128" placeholder="8 - 128"><br>
         </div>
 
         <button id="generate" class="btn">Generate Password</button>

@@ -95,6 +95,12 @@ var hasUpperCasedCharacters = [
 const MIN_PASS_LENGTH = 8;
 const MAX_PASS_LENGTH = 128;
 
+const ERROR_MESSAGE_1 = "Please select at least one character class from the options below.";
+const ERROR_MESSAGE_2 = "The total percentages must add up to 100%. There's currently no room for percentage auto-completion without exceeding 100%.";
+const ERROR_MESSAGE_3 = "The total percentages must add up to 100%. To enable automatic calculation, leave one or more selected fields blank and try again.";
+const ERROR_MESSAGE_4 = "The total percentage exceeds 100%. Please make sure the sum does not exceed 100%.";
+const ERROR_MESSAGE_5 = "Password length must be between 8 and 128 characters. Please provide a valid length within this range.";
+
 
 // ==================================== //
 
@@ -164,7 +170,7 @@ function getPassword(userOptions) {
 
   // Returns Error message if no char class was selected
   if (!userOptions.lower && !userOptions.upper && !userOptions.numeric && !userOptions.special) {
-    return "Please select at least one of the character classes below."
+    return ERROR_MESSAGE_1;
   }
 
   // Calculates number of NaN (unspecified percentages) and Total Percentage Sum the user specified
@@ -182,11 +188,14 @@ function getPassword(userOptions) {
   // Returns Error message..
   if (totalPercentage > 100) {
     // If the total percentage specified is more than 100(%)
-    return "Percentage sum exceeds 100%. Please try again";
+    return ERROR_MESSAGE_4;
   } else if (totalPercentage < 100) {
+    if ( totalPercentage + countNaN > 100) {
+      return ERROR_MESSAGE_2;
+    }
     // If the total percentage specified is less than 100(%) and no automatic calculation can be done
     if (countNaN === 0) {
-      return "Percentages must total 100%. To automatically calculate, leave one or more selected fields blank. Please try again.";
+      return ERROR_MESSAGE_3;
     }
 
     // Automatically updates unspecified percentages
@@ -204,7 +213,7 @@ function getPassword(userOptions) {
     }
   } else {
     if (countNaN !== 0) {
-      return "Percentages must total 100%. There is no room for percentage auto-completion without exceeding 100%."
+      return ERROR_MESSAGE_2;
     }
   }
 
@@ -230,11 +239,22 @@ function getPassword(userOptions) {
     }
   }
 
-  // Log percentages to Console 
-  console.log("a-z Percentage: " + lower + "%" + " | " + "0 - " + (lower - 1));
-  console.log("A-Z Percentage: " + upper + "%" + " | " + lower + " - " + (lower + upper - 1));
-  console.log("1-9 Percentage: " + numeric + "%" + " | " + (lower + upper) + " - " + (lower + upper + numeric - 1));
-  console.log("!@^ Percentage: " + special + "%" + " | " + (lower + upper + numeric) + " - " + (lower + upper + numeric + special - 1));
+  // Log percentages to Console (for debugging)
+  
+  console.log("========================");
+  if ("lower" in userOptions.selectedClasses) {
+    console.log("a-z Percentage: " + lower + "%" + " | " + "0 - " + (lower - 1));
+  }
+  if ("upper" in userOptions.selectedClasses) {
+    console.log("A-Z Percentage: " + upper + "%" + " | " + lower + " - " + (lower + upper - 1));
+  }
+  if ("numeric" in userOptions.selectedClasses) {
+    console.log("1-9 Percentage: " + numeric + "%" + " | " + (lower + upper) + " - " + (lower + upper + numeric - 1));
+  }
+  if ("special" in userOptions.selectedClasses) {
+    console.log("!@^ Percentage: " + special + "%" + " | " + (lower + upper + numeric) + " - " + (lower + upper + numeric + special - 1));
+  }
+  console.log("========================");
 
 
 
@@ -311,15 +331,24 @@ function generatePassword() {
 
   // Return Error Message if no character classes were selected
   if (userOptions.pwLength < MIN_PASS_LENGTH || userOptions.pwLength > MAX_PASS_LENGTH) {
-    return "Password length must be between 8 - 128 characters. Please try again."
+    return ERROR_MESSAGE_5;
   }
 
   // Creates var to store password
   var password;
+  var tries = 1;
 
   while (true) {
+
+    // Counts tries
+
+    console.log("");
+    console.log("Try " + tries + ":");
+    tries++;
+
     // Creates password
   password = getPassword(userOptions);
+  console.log(password);
 
     // Checks if password includes all user's specified char classes
     if (
@@ -359,3 +388,17 @@ function writePassword() {
 
 // Add event listener to generate button
 generateBtn.addEventListener('click', writePassword);
+
+
+// Option percentages behaviour //
+var optionInputs = document.querySelectorAll(".option-input");
+
+optionInputs.forEach(function (input) {
+  input.addEventListener('input', function() {
+    var percentageValue = parseInt(input.value);
+    if (isNaN(percentageValue) || percentageValue < 1 || percentageValue > 100 || percentageValue !== parseFloat(input.value)) {
+      input.value = "";
+    }
+  });
+});
+
