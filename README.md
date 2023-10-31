@@ -2,6 +2,11 @@
 
 Welcome to the "Dynamic Password Generator" project repository. This web application is designed to generate random passwords based on user-specified options, offering a dynamic and user-friendly approach to password creation. This readme provides an in-depth overview of the project, its motivations, implementation details, challenges addressed, insights gained, and usage instructions.
 
+[app-screenshot-1](./assets/images/app-screenshot-1.png)
+[app-screenshot-1](./assets/images/app-screenshot-2.png)
+
+<img src="./assets/images/app-screenshot-1.png" alt="Deployed Website Screenshot 1" width="450"/>
+<img src="./assets/images/app-screenshot-2.png" alt="Deployed Website Screenshot 2" width="185" />
 
 ## Usage
 
