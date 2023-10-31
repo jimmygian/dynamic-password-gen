@@ -1,34 +1,90 @@
 <!DOCTYPE html>
 <html lang="en-gb">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Password Generator</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Password Generator</h1>
-      </header>
-      <div class="card">
-        <div class="card-header">
-          <h2>Generate a Password</h2>
-        </div>
-        <div class="card-body">
-          <textarea
-            readonly
-            id="password"
-            placeholder="Your Secure Password"
-            aria-label="Generated Password"
-          ></textarea>
-        </div>
-        <div class="card-footer">
-          <button id="generate" class="btn">Generate Password</button>
-        </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Password Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Wrapper -->
+  <div class="wrapper">
+
+    <!-- Header -->
+    <header>
+      <h1>Password Generator</h1>
+    </header>
+
+    <!-- Card -->
+    <div class="card">
+
+      <div class="card-header">
+        <h2>Generate a Password</h2>
       </div>
+
+      <div class="card-body">
+        <textarea readonly id="password" placeholder="Your Secure Password" aria-label="Generated Password"></textarea>
+      </div>
+      <!-- Card Instructions -->
+      <div class="card-instructions">
+        <p>
+          <b>Instructions:</b> Select up to 4 character classes and specify an optional percentage (1-100%) for each class. 
+          Ensure the combined percentage allocation for selected classes doesn't exceed 100%. 
+          Unspecified percentages will be automatically calculated.
+        </p>
+      </div>
+      <!-- Card footer -->
+      <div class="card-footer">
+
+        <div class="options-container">
+          <div class="option-item">
+            <input class="option-checkbox" type="checkbox" name="lower" id="lower-case" checked>
+            <label for="lower-case">a-z</label>
+            <input class="option-input" type="number" name="lower-percent" min="0" max="100" placeholder="%"><br>
+          </div>
+
+          <div class="option-item">
+            <input class="option-checkbox" type="checkbox" name="upper" id="upper-case" checked>
+            <label for="upper-case">A-Z</label>
+            <input class="option-input" type="number" name="upper-percent" min="0" max="100" placeholder="%"><br>
+          </div>
+
+
+          <div class="option-item">
+            <input class="option-checkbox" type="checkbox" name="numeric" id="numeric" checked>
+            <label for="numeric">1-9</label>
+            <input class="option-input" type="number" name="numeric-percent" min="0" max="100" placeholder="%"><br>
+          </div>
+          
+          <div class="option-item">
+            <input class="option-checkbox" type="checkbox" name="special" id="special" checked>
+            <label for="special">!@^..</label>
+            <input class="option-input" type="number" name="special-percent" min="0" max="100" placeholder="%"><br>
+          </div>
+
+          
+        </div>
+
+        <div class="length-container">
+          <label for="option-special-percent">Password length:</label>
+          <input id="pw-length" type="number" name="option-special-percent" min="8" max="128" placeholder="8 - 128"><br>
+        </div>
+
+        <button id="generate" class="btn">Generate Password</button>
+      </div>
+
+
     </div>
-    <script src="script.js"></script>
-  </body>
+
+  </div>
+
+
+
+  <script src="script.js"></script>
+</body>
+
 </html>

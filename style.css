@@ -1,8 +1,20 @@
+/* GLOBAL */
+
+:root {
+  --background-color: 57, 52, 62;
+  --card-color: hsl(270, 4%, 91%);
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  /* border: 1px solid black; */
 }
+
+
+
+/* BACKGROUND */
 
 html,
 body,
@@ -10,11 +22,12 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: rgb(var(--background-color));
 }
 
 body {
   font-family: sans-serif;
-  background-color: #f9fbfd;
+  background-color: var(--background-color);
 }
 
 .wrapper {
@@ -23,15 +36,28 @@ body {
   padding-right: 20px;
 }
 
+
+
+/* HEADER */
+
 header {
   text-align: center;
   padding: 20px;
   padding-top: 0px;
-  color: hsl(206, 17%, 28%);
+  color: rgb(59, 73, 84);
 }
 
+header h1 {
+  color: white;
+}
+
+
+
+/* CARD */
+
+/* Card Background properties */
 .card {
-  background-color: hsl(0, 0%, 100%);
+  background-color: var(--card-color);
   border-radius: 5px;
   border-width: 1px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
@@ -42,6 +68,33 @@ header {
   padding: 30px 40px;
 }
 
+/* Password text area */
+.card-body {
+  min-height: 170px;
+}
+#password {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  display: block;
+  width: 100%;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 85px;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 2px dashed #c0c7cf;
+  border-radius: 6px;
+  resize: none;
+  overflow: hidden;
+}
+
+
+/* Card Header */
 .card-header::after {
   content: " ";
   display: block;
@@ -50,14 +103,12 @@ header {
   height: 2px;
 }
 
-.card-body {
-  min-height: 100px;
-}
 
+
+/* Card footer */
 .card-footer {
   text-align: center;
 }
-
 .card-footer::before {
   content: " ";
   display: block;
@@ -65,12 +116,13 @@ header {
   background: #e7e9eb;
   height: 2px;
 }
-
 .card-footer::after {
   content: " ";
   display: block;
   clear: both;
 }
+
+/* Button */
 
 .btn {
   border: none;
@@ -93,30 +145,67 @@ button[disabled] {
   background: #c0c7cf;
 }
 
-.float-right {
-  float: right;
+
+/* Options Container */
+
+.options-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-direction: row;
+}
+.option-item {
+  margin: 3px;
 }
 
-#password {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  display: block;
-  width: 100%;
-  padding-top: 15px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 85px;
-  font-size: 1.2rem;
+.option-item input[type="number"] {
+  width: 40px;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4px;
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: 2px dashed #c0c7cf;
-  border-radius: 6px;
-  resize: none;
-  overflow: hidden;
 }
+
+/* length */
+.length-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px;
+  padding: 2px 10px;
+}
+.length-container [type="number"] {
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 4px;
+  width: 70px;
+  padding: 2px 2px;
+  margin: 1px 5px;
+  text-align: center;
+}
+
+
+/* Card instructions */
+.card-instructions {
+  min-height: 130px;
+}
+.card-instructions p {
+  font-size: smaller;
+  margin-bottom: 25px;
+}
+
+/* 
+#error-message {
+  display: block;
+  text-align: center;
+  margin: 10px;
+  background-color: rgb(208, 99, 99);
+  color: white;
+  padding: 2px 10px;
+
+  border-radius: 4px;
+
+} */
+
+/* Media Queries */
 
 @media (max-width: 690px) {
   .btn {
@@ -128,10 +217,15 @@ button[disabled] {
   #password {
     font-size: 1rem;
   }
+
 }
 
-@media (max-width: 500px) {
+@media (max-width: 545px) {
   .btn {
     font-size: 0.8rem;
   }
+  .options-container {
+    flex-direction: column;
+  }
 }
+
