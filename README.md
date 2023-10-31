@@ -2,17 +2,15 @@
 
 Welcome to the "Dynamic Password Generator" project repository. This web application is designed to generate random passwords based on user-specified options, offering a dynamic and user-friendly approach to password creation. This readme provides an in-depth overview of the project, its motivations, implementation details, challenges addressed, insights gained, and usage instructions.
 
-[app-screenshot-1](./assets/images/app-screenshot-1.png)
-[app-screenshot-1](./assets/images/app-screenshot-2.png)
 
-<img src="./assets/images/app-screenshot-1.png" alt="Deployed Website Screenshot 1" width="450"/>
-<img src="./assets/images/app-screenshot-2.png" alt="Deployed Website Screenshot 2" width="185" />
+<img src="./assets/images/app-screenshot-1.png" alt="Deployed Website Screenshot 1" />
+<!-- <img src="./assets/images/app-screenshot-2.png" alt="Deployed Website Screenshot 2" width="250" /> -->
 
 ## Usage
 
 To explore the "Dynamic Password Generator," follow these steps:
 
-1. Visit the deployed application at [Dynamic Password Generator](https://jimmygian.github.io/edX_my-code-generator/).
+1. Visit the deployed application at [Dynamic Password Generator](https://jimmygian.github.io/dynamic-password-gen).
 
 2. Within the web application, you can select up to four character classes and specify optional percentages (1-100%) for each class.
 
@@ -79,4 +77,5 @@ This project was conceived, developed, and is actively maintained by Dimitris Gi
 This project is licensed under the MIT License, granting you the freedom to use and modify the code in accordance with the terms specified in the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Links
-
+- Deployed application: https://jimmygian.github.io/dynamic-password-gen
+- Repository: https://github.com/jimmygian/dynamic-password-gen
